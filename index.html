@@ -51,7 +51,23 @@ function animate(){if(g.state!=="pitching")return;let t=Math.min(1,(performance.
 window.hit=kind=>{if(g.state!=="pitching"&&g.state!=="waiting")return;let delta=Math.abs(performance.now()-(g.t0+g.dur)),timing=Math.max(0,1-delta/340),p=P[g.batter],chance=Math.min(.97,.25+timing*.52+(p.c+p.v)/520-(kind==="power"?.06:0));if(Math.random()>chance){resolve(delta>340?"late":"miss",null);return}let quality=timing*.7+p.c/250+p.v/600+Math.random()*.1;g.state="hit";g.pitch=null;g.hit={x:300+(Math.random()-.5)*320,y:145+Math.random()*260};render();timer=setTimeout(()=>ballInPlay(quality,kind),380)};
 window.take=()=>{if(g.state!=="pitching"&&g.state!=="waiting")return;let late=performance.now()>g.t0+g.dur+110;resolve(late?"ball":"called strike",null)};
 function resolve(kind){g.pitch=null;g.state="ready";if(kind==="ball")g.balls++;else g.strikes++;if(kind==="ball"){g.msg="BALL"}else g.msg=kind==="late"?"LATE — STRIKE":"STRIKE";if(g.balls>=4){g.balls=0;g.strikes=0;walk()}else if(g.strikes>=3){g.balls=0;g.strikes=0;out("STRIKEOUT!")}render()}
-function ballInPlay(q,kind){g.hit=null;let r=Math.random(),n=1;if(kind==="power"&&q>.92&&r<.25)n=4;else if(q>.88&&r<.2)n=3;else if(q>.70&&r<.38)n=2;g.hit={x:n===4?300+(Math.random()-.5)*80:n===3?300+(Math.random()-.5)*180:300+(Math.random()-.5)*300,y:n===4?90:170+Math.random()*230};draw();advance(n);let p=P[g.batter];p.xp=(p.xp||0)+n*2+(n===4?8:0);if(p===created){created=p;localStorage.setItem("diamondDynastyPlayer",JSON.stringify(created))}g.msg=n===4?"🔥 HOME RUN!":n===3?"TRIPLE!":n===2?"DOUBLE!":"SINGLE!";next();render()}
+function ballInPlay(q,kind){
+g.state="hit";g.pitch=null;let r=Math.random(),n=1;
+if(kind==="power"&&q>.92&&r<.25)n=4;else if(q>.88&&r<.2)n=3;else if(q>.70&&r<.38)n=2;
+let target=n===4?{x:300+(Math.random()-.5)*80,y:82}:n===3?{x:300+(Math.random()-.5)*180,y:150+Math.random()*100}:{x:300+(Math.random()-.5)*300,y:175+Math.random()*240};
+let start={x:300,y:590},t0=performance.now(),dur=n===4?700:560;
+g.hit={x:start.x,y:start.y};g.msg=n===4?"🔥 BALL IS GONE!":n===3?"🏃 TRIPLE DEVELOPING!":n===2?"💥 DOUBLE DEVELOPING!":"⚾ BALL IN PLAY!";
+function fly(){
+let t=Math.min(1,(performance.now()-t0)/dur),e=1-Math.pow(1-t,3);
+g.hit={x:start.x+(target.x-start.x)*e,y:start.y+(target.y-start.y)*e-105*Math.sin(t*Math.PI)};
+draw();
+if(t<1){raf=requestAnimationFrame(fly)}else{
+g.hit=null;advance(n);let p=P[g.batter];p.xp=(p.xp||0)+n*2+(n===4?8:0);
+if(p===created){created=p;localStorage.setItem("diamondDynastyPlayer",JSON.stringify(created))}
+g.msg=n===4?"🔥 HOME RUN!":n===3?"TRIPLE!":n===2?"DOUBLE!":"SINGLE!";
+next();render();
+}}
+raf=requestAnimationFrame(fly)}
 function advance(n){let old=[...g.bases],z=[0,0,0],runs=0;if(n===4){runs=1+old.filter(Boolean).length;g.bases=[0,0,0]}else{for(let i=2;i>=0;i--)if(old[i]){let d=i+n;if(d>=3)runs++;else z[d]=1}z[n-1]=1;g.bases=z}g.away+=runs}
 function walk(){let old=[...g.bases];if(old[0]){if(old[1]){if(old[2])g.away++;g.bases[2]=1}g.bases[1]=1}g.bases[0]=1;g.msg="WALK!";next()}
 function next(){g.balls=0;g.strikes=0;g.batter=(g.batter+1)%P.length}
