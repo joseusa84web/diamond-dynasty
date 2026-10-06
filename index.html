@@ -39,7 +39,7 @@ try{const raw=localStorage.getItem("diamondDynastySave");if(raw)save=JSON.parse(
 let game=null;
 function roster(){return basePlayers.concat(save.created?[save.created]:[])}
 function persist(){try{localStorage.setItem("diamondDynastySave",JSON.stringify(save))}catch(e){}xpLabel.textContent="XP "+save.xp}
-function startGame(){game={inning:1,half:"Top",outs:0,balls:0,strikes:0,runs:0,opponent:0,bases:[0,0,0],batter:0,message:"First pitch!"];drawGame()}
+function startGame(){game={inning:1,half:"Top",outs:0,balls:0,strikes:0,runs:0,opponent:0,bases:[0,0,0],batter:0,message:"First pitch!"};drawGame()}
 function player(){const r=roster();return r[game.batter%r.length]}
 function drawGame(){
 persist();const p=player();
