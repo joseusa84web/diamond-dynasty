@@ -1,93 +1,162 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#07130d"><title>Diamond Dynasty 2.0</title>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#07150c">
+<title>Diamond Dynasty — Baseball</title>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:#06100b;color:#fff;font-family:system-ui,-apple-system,sans-serif}body{display:flex;justify-content:center}#app{width:min(100%,520px);padding:10px 10px 24px}header{display:flex;justify-content:space-between;align-items:center;background:#0c1c13;border:1px solid #294b34;border-radius:16px;padding:12px 14px;margin-bottom:10px}.logo{font-weight:900;letter-spacing:1px}.sub{font-size:10px;color:#8fa696}.score{text-align:right;font-weight:900}.score small{display:block;color:#8fa696;font-size:10px}.panel{background:#0b1811;border:1px solid #294b34;border-radius:16px;padding:10px;margin-bottom:10px}#hud{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}.stat{background:#07110c;border-radius:10px;padding:7px;text-align:center}.stat b{display:block;font-size:16px}.stat span{font-size:9px;color:#8fa696}canvas{display:block;width:100%;height:auto;border-radius:16px;border:1px solid #315c3c;touch-action:none}.controls,#pitchControls,#fieldControls{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}#fieldControls{grid-template-columns:repeat(4,1fr)}button{border:0;border-radius:13px;padding:13px 7px;font-weight:900;color:#fff;background:#183824;font-size:12px;min-height:48px}button:active{transform:scale(.97)}.primary{background:#a56b18}.danger{background:#6b2222}.blue{background:#174d72}#menu{display:flex;gap:7px;margin-bottom:10px}#menu button{min-height:40px;font-size:10px;padding:7px;background:#102419}#message{min-height:44px;text-align:center;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}.hidden{display:none!important}#overlay{position:fixed;inset:0;background:rgba(0,0,0,.84);display:flex;align-items:center;justify-content:center;padding:20px;z-index:5}.card{width:min(100%,440px);background:#0b1811;border:1px solid #315c3c;border-radius:22px;padding:22px;text-align:center}.card h1{font-size:29px;margin:0 0 8px}.card p{color:#9bb1a1;line-height:1.45}.card button{width:100%;margin-top:12px}
-</style></head><body>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#050b08;color:#fff;font-family:system-ui,-apple-system,sans-serif}
+body{display:flex;justify-content:center}
+#app{width:min(100%,560px);padding:10px 10px 28px}
+header{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(145deg,#10291a,#09150e);border:1px solid #31573b;border-radius:18px;padding:12px 14px;margin-bottom:9px}
+.logo{font-weight:1000;letter-spacing:1px}.sub{font-size:10px;color:#91a899}.score{font-size:20px;font-weight:1000;text-align:right}.score small{display:block;font-size:9px;color:#91a899}
+.panel{background:#0b1710;border:1px solid #294832;border-radius:16px;padding:9px;margin-bottom:9px}
+#hud{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.stat{background:#07110b;border-radius:10px;text-align:center;padding:7px}.stat b{display:block;font-size:16px}.stat span{font-size:8px;color:#8da294}
+canvas{width:100%;height:auto;display:block;border-radius:17px;border:1px solid #315a3b;touch-action:none;background:#143b22}
+#message{min-height:43px;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}button{border:0;border-radius:13px;min-height:48px;padding:10px 5px;font-weight:950;color:white;background:#183b26;font-size:11px}button:active{transform:scale(.96)}
+.gold{background:#a86d16}.red{background:#7a2525}.blue{background:#1a5275}.dark{background:#102218}
+#topmenu{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px}#topmenu button{min-height:38px;font-size:10px}
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:10;display:flex;align-items:center;justify-content:center;padding:18px}
+.card{width:min(100%,430px);background:#0b1810;border:1px solid #3b6947;border-radius:24px;padding:24px;text-align:center;box-shadow:0 20px 70px #000}
+.card h1{font-size:31px;margin:0 0 6px}.card p{color:#9bb0a0;line-height:1.45;font-size:13px}.card button{width:100%;margin-top:9px}.hidden{display:none!important}
+#roster{font-size:12px;line-height:1.7;color:#b7c7bb}
+</style>
+</head>
+<body>
 <div id="app">
-<header><div><div class="logo">⚾ DIAMOND DYNASTY</div><div class="sub">PLAYABLE CORE 2.0</div></div><div class="score"><span id="score">0 - 0</span><small id="inning">TOP 1</small></div></header>
-<div id="menu"><button onclick="newGame()">NEW GAME</button><button onclick="resetSave()">RESET</button><button onclick="showRoster()">ROSTER</button></div>
-<div class="panel" id="hud"><div class="stat"><b id="outs">0</b><span>OUTS</span></div><div class="stat"><b id="count">0-0</b><span>COUNT</span></div><div class="stat"><b id="bases">—</b><span>BASES</span></div><div class="stat"><b id="batter">Leo</b><span>BATTER</span></div></div>
-<canvas id="field" width="500" height="650"></canvas>
-<div class="panel" id="message">Tap PLAY BALL.</div>
+<header><div><div class="logo">⚾ DIAMOND DYNASTY</div><div class="sub">REAL PLAYABLE BASEBALL • v3</div></div><div class="score"><span id="score">0 - 0</span><small id="inning">TOP 1</small></div></header>
+<div id="topmenu"><button onclick="newGame()">NEW GAME</button><button onclick="toggleRoster()">ROSTER</button><button onclick="resetGame()">RESET</button></div>
+<div id="roster" class="panel hidden"></div>
+<div id="hud" class="panel">
+<div class="stat"><b id="outs">0</b><span>OUTS</span></div>
+<div class="stat"><b id="count">0-0</b><span>COUNT</span></div>
+<div class="stat"><b id="bases">—</b><span>BASES</span></div>
+<div class="stat"><b id="batter">Leo</b><span>BATTER</span></div>
+</div>
+<canvas id="field" width="540" height="680"></canvas>
+<div id="message" class="panel">PLAY BALL</div>
 <div class="panel">
-<div id="pitchControls"><button onclick="choosePitch('fastball')">FASTBALL</button><button onclick="choosePitch('slider')">SLIDER</button><button onclick="choosePitch('changeup')">CHANGEUP</button></div>
-<div id="fieldControls" style="display:none"><button onclick="fieldThrow('1B')">THROW 1B</button><button onclick="fieldThrow('2B')">THROW 2B</button><button onclick="fieldThrow('3B')">THROW 3B</button><button onclick="fieldThrow('HOME')">THROW HOME</button></div>
-<div class="controls" style="margin-top:8px"><button class="primary" onclick="swing('contact')">CONTACT SWING</button><button class="danger" onclick="swing('power')">POWER SWING</button><button class="blue" onclick="takePitch()">TAKE PITCH</button></div>
+<div id="batControls" class="grid">
+<button class="gold" onclick="swing('contact')">CONTACT<br>SWING</button>
+<button class="red" onclick="swing('power')">POWER<br>SWING</button>
+<button class="blue" onclick="takePitch()">TAKE<br>PITCH</button>
 </div>
-<div class="panel" style="font-size:11px;color:#8fa798;text-align:center">Time the swing when the ball reaches the plate. Your animal's attributes change the odds.</div>
+<div id="pitchControls" class="grid" style="margin-top:7px">
+<button onclick="pitch('fastball')">FASTBALL</button><button onclick="pitch('slider')">SLIDER</button><button onclick="pitch('changeup')">CHANGEUP</button>
 </div>
-<div id="overlay"><div class="card"><h1>⚾ Diamond Dynasty</h1><p>Playable baseball core: pitching, timing, hitting, outs, bases, scoring, innings and defense.</p><button class="primary" onclick="startFromOverlay()">PLAY BALL</button></div></div>
+<div id="defenseControls" class="grid hidden" style="grid-template-columns:repeat(4,1fr)">
+<button onclick="throwBall(0)">1B</button><button onclick="throwBall(1)">2B</button><button onclick="throwBall(2)">3B</button><button onclick="throwBall(3)">HOME</button>
+</div>
+</div>
+<div class="panel" style="font-size:10px;color:#8ea295;text-align:center">Time your swing for the plate. Contact = safer. Power = more extra-base hits. On defense, choose where to throw.</div>
+</div>
+<div id="overlay"><div class="card"><h1>⚾ Diamond Dynasty</h1><p>A real playable baseball game running in your browser. Pitch, swing, run the bases, defend, score and play three innings.</p><button class="gold" onclick="begin()">PLAY BALL</button></div></div>
+
 <script>
-(function(){
-"use strict";
-const c=document.getElementById("field"),x=c.getContext("2d"),score=document.getElementById("score"),inn=document.getElementById("inning"),outs=document.getElementById("outs"),count=document.getElementById("count"),bases=document.getElementById("bases"),batter=document.getElementById("batter"),msg=document.getElementById("message"),pc=document.getElementById("pitchControls"),fc=document.getElementById("fieldControls"),ov=document.getElementById("overlay");
-const players=[{name:"Leo",e:"🦁",p:88,s:58,v:72,co:78},{name:"Flash",e:"🐆",p:62,s:94,v:76,co:82},{name:"Eagle",e:"🦅",p:70,s:71,v:96,co:90},{name:"Cobra",e:"🐍",p:74,s:65,v:88,co:84}];
-let g=null,raf=0;
-function fresh(){return{inning:1,half:"Top",outs:0,balls:0,strikes:0,away:0,home:0,b:[0,0,0],bat:0,pitch:null,ps:0,pe:0,px:250,py:105,phase:"batting",play:null,message:"Choose a pitch."}}
-window.startFromOverlay=function(){ov.classList.add("hidden");newGame()};
-window.newGame=function(){g=fresh();draw()};
-window.resetSave=function(){localStorage.removeItem("diamondDynastySave");g=fresh();g.message="Save reset.";draw()};
-window.showRoster=function(){if(!g)g=fresh();g.message=players.map(a=>a.e+" "+a.name+" P"+a.p+" C"+a.co+" S"+a.s+" V"+a.v).join(" • ");draw()};
-function field(){
-x.clearRect(0,0,500,650);x.fillStyle="#174526";x.fillRect(0,0,500,650);x.fillStyle="#205b32";x.beginPath();x.arc(250,370,275,Math.PI,0);x.fill();
-x.fillStyle="#b99564";x.beginPath();x.moveTo(250,525);x.lineTo(85,355);x.lineTo(250,185);x.lineTo(415,355);x.closePath();x.fill();x.strokeStyle="#fff";x.lineWidth=4;x.stroke();
-x.fillStyle="#fff";[[250,520],[85,355],[250,185],[415,355]].forEach(q=>x.fillRect(q[0]-6,q[1]-6,12,12));x.fillStyle="#c9a77b";x.beginPath();x.arc(250,355,42,0,Math.PI*2);x.fill();x.fillStyle="#fff";x.font="900 18px system-ui";x.textAlign="center";x.fillText("HOME",250,555);x.fillText("2B",250,175);x.fillText("1B",440,365);x.fillText("3B",60,365);
-if(g.half==="Top"){x.font="42px system-ui";x.fillText(players[g.bat].e,250,590)}else{x.font="40px system-ui";x.fillText("🧤",250,590)}
-if(g.pitch){x.fillStyle="#fff";x.beginPath();x.arc(g.px,g.py,9,0,Math.PI*2);x.fill();x.strokeStyle="#b22";x.lineWidth=2;x.stroke()}
-if(g.play){x.fillStyle="#ffd76a";x.font="900 20px system-ui";x.fillText("BALL IN PLAY",250,100)}
+(()=>{"use strict";
+const C=document.getElementById("field"),ctx=C.getContext("2d"),scoreEl=document.getElementById("score"),inningEl=document.getElementById("inning"),outsEl=document.getElementById("outs"),countEl=document.getElementById("count"),basesEl=document.getElementById("bases"),batterEl=document.getElementById("batter"),msgEl=document.getElementById("message"),batEl=document.getElementById("batControls"),pitchEl=document.getElementById("pitchControls"),defEl=document.getElementById("defenseControls"),overlay=document.getElementById("overlay"),rosterEl=document.getElementById("roster");
+const P=[{n:"Leo",e:"🦁",p:88,s:58,v:72,c:78},{n:"Flash",e:"🐆",p:62,s:94,v:76,c:82},{n:"Eagle",e:"🦅",p:70,s:71,v:96,c:90},{n:"Cobra",e:"🐍",p:74,s:65,v:88,c:84}];
+let g=null,raf=0,timer=0;
+const fresh=()=>({inn:1,half:0,outs:0,balls:0,strikes:0,away:0,home:0,b:[0,0,0],bat:0,state:"ready",pitch:null,ps:0,pe:0,px:270,py:105,hit:null,play:null,msg:"Choose a pitch."});
+window.begin=()=>{overlay.classList.add("hidden");newGame()};
+window.newGame=()=>{clearTimeout(timer);cancelAnimationFrame(raf);g=fresh();draw()};
+window.resetGame=()=>{localStorage.removeItem("diamondDynastySave");newGame();g.msg="New season. PLAY BALL.";draw()};
+window.toggleRoster=()=>{rosterEl.classList.toggle("hidden");rosterEl.innerHTML=P.map((p,i)=>`${i+1}. ${p.e} <b>${p.n}</b> — Power ${p.p} • Contact ${p.c} • Speed ${p.s} • Vision ${p.v}`).join("<br>")};
+function drawField(){
+ctx.clearRect(0,0,540,680);
+ctx.fillStyle="#123b20";ctx.fillRect(0,0,540,680);
+ctx.fillStyle="#1d542d";ctx.beginPath();ctx.arc(270,390,330,Math.PI,0);ctx.fill();
+ctx.fillStyle="#b88c59";ctx.beginPath();ctx.moveTo(270,550);ctx.lineTo(82,360);ctx.lineTo(270,170);ctx.lineTo(458,360);ctx.closePath();ctx.fill();
+ctx.strokeStyle="#fff";ctx.lineWidth=4;ctx.stroke();
+[[270,550],[82,360],[270,170],[458,360]].forEach(([a,b])=>{ctx.fillStyle="#fff";ctx.fillRect(a-7,b-7,14,14)});
+ctx.fillStyle="#d7b27b";ctx.beginPath();ctx.arc(270,360,44,0,Math.PI*2);ctx.fill();
+ctx.fillStyle="#fff";ctx.font="900 17px system-ui";ctx.textAlign="center";ctx.fillText("HOME",270,586);ctx.fillText("2B",270,158);ctx.fillText("3B",55,365);ctx.fillText("1B",485,365);
+if(g.half===0){ctx.font="45px system-ui";ctx.fillText(P[g.bat].e,270,630);ctx.font="700 12px system-ui";ctx.fillText("BATTER",270,650)}else{ctx.font="43px system-ui";ctx.fillText("🧤",270,630);ctx.font="700 12px system-ui";ctx.fillText("DEFENSE",270,650)}
+for(let i=0;i<3;i++)if(g.b[i]){let pos=[[458,360],[270,170],[82,360]][i];ctx.font="25px system-ui";ctx.fillText("🏃",pos[0],pos[1]-13)}
+if(g.pitch){ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(g.px,g.py,10,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#c33";ctx.lineWidth=2;ctx.stroke()}
+if(g.hit){ctx.strokeStyle="#ffe07b";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(270,550);ctx.lineTo(g.hit.x,g.hit.y);ctx.stroke();ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(g.hit.x,g.hit.y,8,0,Math.PI*2);ctx.fill()}
 }
 function draw(){
-if(!g)g=fresh();score.textContent=g.away+" - "+g.home;inn.textContent=(g.half==="Top"?"TOP ":"BOT ")+g.inning;outs.textContent=g.outs;count.textContent=g.balls+"-"+g.strikes;
-let bs=(g.b[0]?"1B ":"")+(g.b[1]?"2B ":"")+(g.b[2]?"3B":"");bases.textContent=bs||"—";batter.textContent=players[g.bat].name;msg.textContent=g.message;
-pc.style.display=g.half==="Top"?"grid":"none";fc.style.display=g.half==="Bottom"?"grid":"none";field()
+if(!g)return;
+scoreEl.textContent=g.away+" - "+g.home;inningEl.textContent=(g.half===0?"TOP ":"BOT ")+g.inn;
+outsEl.textContent=g.outs;countEl.textContent=g.balls+"-"+g.strikes;
+basesEl.textContent=g.b.map((v,i)=>v?(i===0?"1B":i===1?"2B":"3B"):"").filter(Boolean).join(" ")||"—";
+batterEl.textContent=P[g.bat].n;
+msgEl.textContent=g.msg;
+batEl.classList.toggle("hidden",g.half!==0||!(g.state==="ready"||g.state==="pitching"||g.state==="waiting"));
+pitchEl.classList.toggle("hidden",g.half!==0||g.state!=="ready");
+defEl.classList.toggle("hidden",g.half!==1||!g.play);
+drawField();
 }
-function animate(){
-let t=Math.min(1,(performance.now()-g.ps)/(g.pe-g.ps));g.px=250+Math.sin(t*Math.PI*2)*(g.pitch==="slider"?58:g.pitch==="changeup"?22:12);g.py=105+t*410;field();
-if(t<1){raf=requestAnimationFrame(animate)}else{g.phase="waiting";g.message="SWING NOW!";draw();setTimeout(()=>{if(g.phase==="waiting")finish(false)},180)}
+function pitch(type){
+if(g.half!==0||g.state!=="ready")return;
+g.pitch=type;g.state="pitching";g.ps=performance.now();
+let dur=type==="changeup"?1250:type==="slider"?920:760;g.pe=g.ps+dur;g.msg=type.toUpperCase()+" — WATCH THE BALL";draw();animatePitch();
 }
-window.choosePitch=function(type){
-if(!g||g.half!=="Top"||g.phase!=="batting")return;g.pitch=type;g.phase="pitching";g.ps=performance.now();g.pe=g.ps+(type==="changeup"?1150:type==="slider"?900:760);g.message=type.toUpperCase()+" coming...";draw();animate()
+function animatePitch(){
+if(!g.pitch)return;let t=Math.min(1,(performance.now()-g.ps)/(g.pe-g.ps));
+let curve=g.pitch==="slider"?Math.sin(t*Math.PI)*70:g.pitch==="changeup"?Math.sin(t*Math.PI)*20:Math.sin(t*Math.PI)*9;
+g.px=270+curve;g.py=108+t*420;drawField();
+if(t<1){raf=requestAnimationFrame(animatePitch)}else{g.state="waiting";g.msg="⚡ SWING NOW!";draw();timer=setTimeout(()=>{if(g.state==="waiting")resolveSwing(false,"late")},190)}
+}
+window.swing=(kind)=>{
+if(g.state!=="pitching"&&g.state!=="waiting")return;
+let d=Math.abs(performance.now()-g.pe),p=P[g.bat];
+if(d>330){resolveSwing(true,"late");return}
+let timing=Math.max(0,1-d/330),skill=(p.c+p.v)/210,contact=Math.min(.96,.28+timing*.48+skill*.36);
+if(kind==="power")contact*=.91;
+if(Math.random()>contact){resolveSwing(true,"miss");return}
+let quality=timing*.62+p.c/250+p.v/500+Math.random()*.15;
+g.state="hit";g.pitch=null;g.hit={x:270+(Math.random()-.5)*280,y:120+Math.random()*230};
+draw();timer=setTimeout(()=>resolveHit(quality,kind),420);
 };
-window.swing=function(kind){
-if(!g||(g.phase!=="pitching"&&g.phase!=="waiting"))return;let d=Math.abs(performance.now()-g.pe),p=players[g.bat];
-if(d>310){finish(true);return}let timing=Math.max(0,1-d/300),chance=Math.min(.97,.20+timing*.48+p.co/210+p.v/500)*(kind==="power"?.95:1),q=timing+p.co/200+Math.random()*.2;
-if(Math.random()>chance){finish(true);return}g.pitch=null;g.phase="running";g.message=q>.95?"SMOKED!":q>.72?"HARD CONTACT!":"CONTACT!";draw();setTimeout(()=>hit(q,kind),300)
-};
-window.takePitch=function(){if(!g||(g.phase!=="pitching"&&g.phase!=="waiting"))return;finish(false)};
-function finish(miss){
-g.pitch=null;g.phase="batting";if(miss){g.strikes++;g.message="SWING AND MISS"}else{g.balls++;g.message="BALL"}
-if(g.strikes>=3){g.strikes=0;g.balls=0;out("STRIKEOUT!");return}
-if(g.balls>=4){g.strikes=0;g.balls=0;walk();g.message="WALK!";draw();return}draw()
+window.takePitch=()=>{if(g.state!=="pitching"&&g.state!=="waiting")return;let late=performance.now()-g.pe>140;resolveSwing(false,late?"ball":"called strike")};
+function resolveSwing(miss,why){
+g.pitch=null;g.state="ready";
+if(miss){g.strikes++;g.msg=why==="late"?"Too late — STRIKE!":"Swing and miss — STRIKE!"}else{g.balls++;g.msg=why==="ball"?"BALL":"Called strike!"}
+if(!miss&&why==="called strike")g.strikes++;
+if(g.strikes>=3){g.strikes=0;g.balls=0;makeOut("STRIKEOUT!")}else if(g.balls>=4){g.strikes=0;g.balls=0;walk()}draw();
 }
-function hit(q,kind){
-let p=players[g.bat],r=Math.random(),n=1,pow=p.p/100;
-if(kind==="power"&&q>.9&&r<.16+pow*.18)n=4;else if(q>.92&&r<.12+pow*.18)n=3;else if(q>.78&&r<.25+pow*.2)n=2;
-if(n===4){g.away++;g.message="HOME RUN! "+p.e+" "+p.name+" crushes it!";resetAB();draw();return}advance(n);g.message=(n===3?"TRIPLE!":n===2?"DOUBLE!":"SINGLE!")+" "+p.name+"!";resetAB();draw()
+function resolveHit(q,kind){
+g.hit=null;g.state="ready";let p=P[g.bat],r=Math.random(),n=1;
+if(kind==="power"&&q>.95&&r<.26)n=4;else if(q>.9&&r<.22)n=3;else if(q>.74&&r<.34)n=2;
+advance(n);g.msg=n===4?"🔥 HOME RUN!":n===3?"TRIPLE!":n===2?"DOUBLE!":"SINGLE!";
+nextBatter();draw();
 }
 function advance(n){
-let z=[0,0,0],runs=0;for(let i=2;i>=0;i--)if(g.b[i]){let d=i+n;if(d>=3)runs++;else z[d]=1}
-if(n===1){if(g.b[0])z[1]=1;else z[0]=1;if(g.b[1])z[2]=1}g.b=z;g.away+=runs
+let old=[...g.b],z=[0,0,0],runs=0;
+for(let i=2;i>=0;i--)if(old[i]){let d=i+n;if(d>=3)runs++;else z[d]=1}
+if(n===1)z[0]=1; if(n===2)z[1]=1;if(n===3)z[2]=1;
+g.b=z;g.away+=runs;
+if(n===4){g.away+=1+old.filter(Boolean).length;g.b=[0,0,0]}
 }
-function walk(){advance(1)}
-function resetAB(){g.bat=(g.bat+1)%players.length;g.balls=0;g.strikes=0}
-function out(t){g.outs++;g.message=t;if(g.outs>=3){g.outs=0;g.b=[0,0,0];half()}else{resetAB();draw()}}
-function half(){
-if(g.half==="Top"){g.half="Bottom";g.phase="fielding";g.message="DEFENSE: AI is batting.";draw();setTimeout(aiBat,600)}
-else{g.half="Top";g.inning++;g.b=[0,0,0];g.bat=0;if(g.inning>3){end();return}g.phase="batting";g.message="NEW INNING — YOU BAT";draw()}
+function walk(){let forced=g.b[0];if(forced){let r2=g.b[1],r3=g.b[2];g.b=[1,1,r2];if(r3)g.away++}else g.b[0]=1;g.msg="WALK!";nextBatter();draw()}
+function nextBatter(){g.bat=(g.bat+1)%P.length;g.balls=0;g.strikes=0}
+function makeOut(text){g.outs++;g.msg=text;if(g.outs>=3){g.outs=0;g.b=[0,0,0];switchHalf()}else{nextBatter();draw()}}
+function switchHalf(){
+if(g.half===0){g.half=1;g.state="defense";g.msg="BOTTOM ${g.inn} — DEFENSE!";draw();timer=setTimeout(aiAtBat,650)}
+else{g.inn++;g.b=[0,0,0];g.bat=0;if(g.inn>3){finish()}else{g.half=0;g.state="ready";g.msg="TOP "+g.inn+" — YOUR AT BAT";draw()}}
 }
-function aiBat(){
-if(g.half!=="Bottom")return;g.phase="fielding";let r=Math.random();
-if(r<.43){g.play={n:r<.13?4:r<.27?2:1};g.message="AI HIT! Choose a throw.";draw()}else{g.outs++;g.message="AI batter OUT!";if(g.outs>=3){g.outs=0;half()}else{draw();setTimeout(aiBat,500)}}
+function aiAtBat(){
+if(!g||g.half!==1)return;let r=Math.random();
+if(r<.48){let n=r<.12?4:r<.28?2:1;g.play={n};g.msg=n===4?"AI HIT — HOME RUN THREAT!":"AI HIT — CHOOSE A THROW";draw()}
+else makeOut("AI BATTER OUT!");
 }
-window.fieldThrow=function(target){
-if(g.half!=="Bottom"||!g.play)return;let success=Math.random()<.72,n=g.play.n;g.play=null;
-if(success){g.outs++;g.message="GREAT THROW TO "+target+" — OUT!"}else{oppAdvance(n);g.message="SAFE! RUNNER ADVANCES."}
-if(g.outs>=3){g.outs=0;half()}else{draw();setTimeout(aiBat,650)}
+window.throwBall=(base)=>{
+if(!g.play)return;
+let n=g.play.n,success=Math.random()<.73+(base===3?.04:0);g.play=null;
+if(success){g.msg="GREAT THROW — OUT!";g.outs++;if(g.outs>=3){g.outs=0;switchHalf()}else{draw();timer=setTimeout(aiAtBat,550)}}
+else{let run=(n===4||g.b[2]||base===3)?1:0;g.home+=run;g.b=n===2?[0,1,0]:[1,g.b[0],g.b[1]];g.msg="SAFE! RUNNER ADVANCES.";draw();timer=setTimeout(aiAtBat,550)}
 };
-function oppAdvance(n){if(n>=3)g.home++;else if(n===2)g.home++;else{if(g.b[2])g.home++;g.b=[1,g.b[0],g.b[1]]}}
-function end(){g.phase="done";g.message=g.away>g.home?"🏆 DYNASTY WINS!":g.away===g.home?"DRAW GAME":"RIVALS WIN";localStorage.setItem("diamondDynastySave",JSON.stringify(g));draw()}
-draw();
+function finish(){
+g.state="done";let result=g.away>g.home?"🏆 DYNASTY WINS!":g.away===g.home?"🤝 DRAW GAME":"RIVALS WIN";
+g.msg=result+"  Final: "+g.away+" - "+g.home;
+localStorage.setItem("diamondDynastySave",JSON.stringify(g));batEl.classList.add("hidden");pitchEl.classList.add("hidden");defEl.classList.add("hidden");draw();
+}
+newGame();
 })();
-</script></body></html>
+</script>
+</body></html>
