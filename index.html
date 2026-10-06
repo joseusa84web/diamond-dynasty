@@ -63,10 +63,12 @@ let t=Math.min(1,(performance.now()-t0)/dur),e=1-Math.pow(1-t,3);
 g.hit={x:start.x+(target.x-start.x)*e,y:start.y+(target.y-start.y)*e-105*Math.sin(t*Math.PI)};
 draw();
 if(t<1){raf=requestAnimationFrame(fly)}else{
-g.hit=null;g.animRunners=null;advance(n);let p=P[g.batter];p.xp=(p.xp||0)+n*2+(n===4?8:0);
+g.hit=null;animateRunners(n,()=>{
+advance(n);let p=P[g.batter];p.xp=(p.xp||0)+n*2+(n===4?8:0);
 if(p===created){created=p;localStorage.setItem("diamondDynastyPlayer",JSON.stringify(created))}
 g.msg=n===4?"🔥 HOME RUN!":n===3?"TRIPLE!":n===2?"DOUBLE!":"SINGLE!";
 next();render();
+});
 }}
 raf=requestAnimationFrame(fly)}
 function advance(n){let old=[...g.bases],z=[0,0,0],runs=0;if(n===4){runs=1+old.filter(Boolean).length;g.bases=[0,0,0]}else{for(let i=2;i>=0;i--)if(old[i]){let d=i+n;if(d>=3)runs++;else z[d]=1}z[n-1]=1;g.bases=z}g.away+=runs}
