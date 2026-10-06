@@ -1,166 +1,65 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#07150c">
-<title>Diamond Dynasty — Baseball</title>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#07110a"><title>Diamond Dynasty 4.0</title>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:#050b08;color:#fff;font-family:system-ui,-apple-system,sans-serif}
-body{display:flex;justify-content:center}
-#app{width:min(100%,560px);padding:10px 10px 28px}
-header{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(145deg,#10291a,#09150e);border:1px solid #31573b;border-radius:18px;padding:12px 14px;margin-bottom:9px}
-.logo{font-weight:1000;letter-spacing:1px}.sub{font-size:10px;color:#91a899}.score{font-size:20px;font-weight:1000;text-align:right}.score small{display:block;font-size:9px;color:#91a899}
-.panel{background:#0b1710;border:1px solid #294832;border-radius:16px;padding:9px;margin-bottom:9px}
-#hud{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.stat{background:#07110b;border-radius:10px;text-align:center;padding:7px}.stat b{display:block;font-size:16px}.stat span{font-size:8px;color:#8da294}
-canvas{width:100%;height:auto;display:block;border-radius:17px;border:1px solid #315a3b;touch-action:none;background:#143b22}
-#message{min-height:43px;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;font-size:13px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}button{border:0;border-radius:13px;min-height:48px;padding:10px 5px;font-weight:950;color:white;background:#183b26;font-size:11px}button:active{transform:scale(.96)}
-.gold{background:#a86d16}.red{background:#7a2525}.blue{background:#1a5275}.dark{background:#102218}
-#topmenu{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px}#topmenu button{min-height:38px;font-size:10px}
-#overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:10;display:flex;align-items:center;justify-content:center;padding:18px}
-.card{width:min(100%,430px);background:#0b1810;border:1px solid #3b6947;border-radius:24px;padding:24px;text-align:center;box-shadow:0 20px 70px #000}
-.card h1{font-size:31px;margin:0 0 6px}.card p{color:#9bb0a0;line-height:1.45;font-size:13px}.card button{width:100%;margin-top:9px}.hidden{display:none!important}
-#roster{font-size:12px;line-height:1.7;color:#b7c7bb}
-</style>
-</head>
-<body>
-<div id="app">
-<header><div><div class="logo">⚾ DIAMOND DYNASTY</div><div class="sub">REAL PLAYABLE BASEBALL • v3</div></div><div class="score"><span id="score">0 - 0</span><small id="inning">TOP 1</small></div></header>
-<div id="topmenu"><button onclick="newGame()">NEW GAME</button><button onclick="toggleRoster()">ROSTER</button><button onclick="createPlayer()">CREATE</button><button onclick="trainPlayer()">TRAIN</button><button onclick="resetGame()">RESET</button></div>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:#050a07;color:#fff;font-family:system-ui,-apple-system,sans-serif;display:flex;justify-content:center}#app{width:min(100%,600px);padding:10px 10px 30px}
+header,.panel{background:#0b1710;border:1px solid #2d5138;border-radius:16px}header{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.logo{font-weight:1000;letter-spacing:1px}.sub{font-size:9px;color:#8ea393}.score{font-size:22px;font-weight:1000;text-align:right}.score small{display:block;font-size:9px;color:#8ea393}
+#hud{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:7px;margin-bottom:8px}.stat{background:#07100a;border-radius:9px;text-align:center;padding:6px}.stat b{display:block;font-size:15px}.stat span{font-size:7px;color:#8da092}
+canvas{display:block;width:100%;height:auto;border:1px solid #315b3e;border-radius:18px;background:#123a20;touch-action:none}.panel{padding:8px;margin-top:8px}#msg{min-height:40px;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}button{border:0;border-radius:12px;min-height:48px;color:#fff;font-weight:950;font-size:10px;background:#173a24}button:active{transform:scale(.96)}.gold{background:#a86d16}.red{background:#7b2929}.blue{background:#205878}.dark{background:#102217}
+#menu{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}#menu button{min-height:36px;font-size:9px}
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:5;display:flex;align-items:center;justify-content:center;padding:18px}.card{width:min(100%,430px);padding:25px;text-align:center;background:#0b1810;border:1px solid #3d6d49;border-radius:24px}.card h1{font-size:30px;margin:0 0 7px}.card p{font-size:13px;color:#9caf9f;line-height:1.45}.card button{width:100%;margin-top:8px}.hidden{display:none!important}#roster{font-size:11px;line-height:1.8;color:#bdc9c0}
+</style></head><body><div id="app">
+<header><div><div class="logo">⚾ DIAMOND DYNASTY</div><div class="sub">4.0 • PLAYABLE VERTICAL SLICE</div></div><div class="score"><span id="score">0 - 0</span><small id="inn">TOP 1</small></div></header>
+<div id="menu"><button onclick="newGame()">NEW</button><button onclick="showRoster()">ROSTER</button><button onclick="createPlayer()">CREATE</button><button onclick="train()">TRAIN</button></div>
 <div id="roster" class="panel hidden"></div>
-<div id="hud" class="panel">
-<div class="stat"><b id="outs">0</b><span>OUTS</span></div>
-<div class="stat"><b id="count">0-0</b><span>COUNT</span></div>
-<div class="stat"><b id="bases">—</b><span>BASES</span></div>
-<div class="stat"><b id="batter">Leo</b><span>BATTER</span></div>
+<div id="hud" class="panel"><div class="stat"><b id="outs">0</b><span>OUTS</span></div><div class="stat"><b id="count">0-0</b><span>COUNT</span></div><div class="stat"><b id="base">—</b><span>BASES</span></div><div class="stat"><b id="bat">Leo</b><span>BATTER</span></div><div class="stat"><b id="xp">0</b><span>XP</span></div></div>
+<canvas id="field" width="600" height="720"></canvas><div id="msg" class="panel">PRESS PLAY BALL</div>
+<div id="actions" class="panel"><div id="pitchBtns" class="grid"><button onclick="choosePitch('fastball')">FASTBALL</button><button onclick="choosePitch('slider')">SLIDER</button><button onclick="choosePitch('changeup')">CHANGEUP</button></div>
+<div id="hitBtns" class="grid hidden" style="margin-top:7px"><button class="gold" onclick="hit('contact')">CONTACT</button><button class="red" onclick="hit('power')">POWER</button><button class="blue" onclick="take()">TAKE</button></div>
+<div id="defBtns" class="grid hidden" style="grid-template-columns:repeat(4,1fr);margin-top:7px"><button onclick="throwTo(0)">1B</button><button onclick="throwTo(1)">2B</button><button onclick="throwTo(2)">3B</button><button onclick="throwTo(3)">HOME</button></div></div>
+<div class="panel" style="font-size:9px;color:#8fa293;text-align:center">Pitch → watch the ball → tap CONTACT or POWER at the plate. Defend by choosing a base.</div>
 </div>
-<canvas id="field" width="540" height="680"></canvas>
-<div id="message" class="panel">PLAY BALL</div>
-<div class="panel">
-<div id="batControls" class="grid">
-<button class="gold" onclick="swing('contact')">CONTACT<br>SWING</button>
-<button class="red" onclick="swing('power')">POWER<br>SWING</button>
-<button class="blue" onclick="takePitch()">TAKE<br>PITCH</button>
-</div>
-<div id="pitchControls" class="grid" style="margin-top:7px">
-<button onclick="pitch('fastball')">FASTBALL</button><button onclick="pitch('slider')">SLIDER</button><button onclick="pitch('changeup')">CHANGEUP</button>
-</div>
-<div id="defenseControls" class="grid hidden" style="grid-template-columns:repeat(4,1fr)">
-<button onclick="throwBall(0)">1B</button><button onclick="throwBall(1)">2B</button><button onclick="throwBall(2)">3B</button><button onclick="throwBall(3)">HOME</button>
-</div>
-</div>
-<div class="panel" style="font-size:10px;color:#8ea295;text-align:center">Time your swing for the plate. Contact = safer. Power = more extra-base hits. On defense, choose where to throw.</div>
-</div>
-<div id="overlay"><div class="card"><h1>⚾ Diamond Dynasty</h1><p>A real playable baseball game running in your browser. Pitch, swing, run the bases, defend, score and play three innings.</p><button class="gold" onclick="begin()">PLAY BALL</button></div></div>
-
+<div id="overlay"><div class="card"><h1>⚾ Diamond Dynasty</h1><p>Build your animal roster and play a complete three-inning baseball game. This version is the first true gameplay slice: animated pitch, timing-based hitting, base running and defense.</p><button class="gold" onclick="start()">PLAY BALL</button></div></div>
 <script>
 (()=>{"use strict";
-const C=document.getElementById("field"),ctx=C.getContext("2d"),scoreEl=document.getElementById("score"),inningEl=document.getElementById("inning"),outsEl=document.getElementById("outs"),countEl=document.getElementById("count"),basesEl=document.getElementById("bases"),batterEl=document.getElementById("batter"),msgEl=document.getElementById("message"),batEl=document.getElementById("batControls"),pitchEl=document.getElementById("pitchControls"),defEl=document.getElementById("defenseControls"),overlay=document.getElementById("overlay"),rosterEl=document.getElementById("roster");
-const P=[{n:"Leo",e:"🦁",p:88,s:58,v:72,c:78},{n:"Flash",e:"🐆",p:62,s:94,v:76,c:82},{n:"Eagle",e:"🦅",p:70,s:71,v:96,c:90},{n:"Cobra",e:"🐍",p:74,s:65,v:88,c:84}];
-let created=JSON.parse(localStorage.getItem("diamondDynastyPlayer")||"null");
-if(created){P.push(created)}
+const c=document.getElementById("field"),x=c.getContext("2d"),score=document.getElementById("score"),inn=document.getElementById("inn"),outs=document.getElementById("outs"),count=document.getElementById("count"),base=document.getElementById("base"),bat=document.getElementById("bat"),xpEl=document.getElementById("xp"),msg=document.getElementById("msg"),pitchBtns=document.getElementById("pitchBtns"),hitBtns=document.getElementById("hitBtns"),defBtns=document.getElementById("defBtns"),overlay=document.getElementById("overlay"),roster=document.getElementById("roster");
+const P=[{n:"Leo",e:"🦁",p:88,s:58,v:72,c:78,xp:0},{n:"Flash",e:"🐆",p:62,s:94,v:76,c:82,xp:0},{n:"Eagle",e:"🦅",p:70,s:71,v:96,c:90,xp:0},{n:"Cobra",e:"🐍",p:74,s:65,v:88,c:84,xp:0}];
+let created=JSON.parse(localStorage.getItem("diamondDynastyPlayer")||"null");if(created)P.push(created);
 let g=null,raf=0,timer=0;
-const fresh=()=>({inn:1,half:0,outs:0,balls:0,strikes:0,away:0,home:0,b:[0,0,0],bat:0,state:"ready",pitch:null,ps:0,pe:0,px:270,py:105,hit:null,play:null,msg:"Choose a pitch."});
-window.begin=()=>{overlay.classList.add("hidden");newGame()};
-window.newGame=()=>{clearTimeout(timer);cancelAnimationFrame(raf);g=fresh();draw()};
-window.resetGame=()=>{localStorage.removeItem("diamondDynastySave");newGame();g.msg="New season. PLAY BALL.";draw()};
-window.createPlayer=()=>{let n=prompt("Player name:","My Player");if(!n)return;let p={n:n.slice(0,16),e:"⭐",p:75,s:75,v:75,c:75,xp:0};created=p;localStorage.setItem("diamondDynastyPlayer",JSON.stringify(p));if(!P.includes(p))P.push(p);rosterEl.classList.remove("hidden");rosterEl.innerHTML="⭐ <b>"+p.n+"</b> created! Power 75 • Contact 75 • Speed 75 • Vision 75";if(g){g.bat=P.length-1;g.msg="NEW PLAYER CREATED — "+p.n;draw()}};
-window.trainPlayer=()=>{if(!created){createPlayer();return}if((created.xp||0)<20){alert("You need 20 XP. Current XP: "+(created.xp||0));return}created.xp-=20;created.p=Math.min(99,created.p+2);created.c=Math.min(99,created.c+2);created.s=Math.min(99,created.s+2);let i=P.findIndex(a=>a.n===created.n);if(i>=0)P[i]=created;localStorage.setItem("diamondDynastyPlayer",JSON.stringify(created));rosterEl.classList.remove("hidden");rosterEl.innerHTML="🏋️ TRAINING COMPLETE — "+created.n+" improved: Power "+created.p+" • Contact "+created.c+" • Speed "+created.s+" • XP "+created.xp;if(g){g.msg="TRAINING COMPLETE";draw()}};
-window.toggleRoster=()=>{rosterEl.classList.toggle("hidden");rosterEl.innerHTML=P.map((p,i)=>`${i+1}. ${p.e} <b>${p.n}</b> — Power ${p.p} • Contact ${p.c} • Speed ${p.s} • Vision ${p.v}`).join("<br>")};
-function drawField(){
-ctx.clearRect(0,0,540,680);
-ctx.fillStyle="#123b20";ctx.fillRect(0,0,540,680);
-ctx.fillStyle="#1d542d";ctx.beginPath();ctx.arc(270,390,330,Math.PI,0);ctx.fill();
-ctx.fillStyle="#b88c59";ctx.beginPath();ctx.moveTo(270,550);ctx.lineTo(82,360);ctx.lineTo(270,170);ctx.lineTo(458,360);ctx.closePath();ctx.fill();
-ctx.strokeStyle="#fff";ctx.lineWidth=4;ctx.stroke();
-[[270,550],[82,360],[270,170],[458,360]].forEach(([a,b])=>{ctx.fillStyle="#fff";ctx.fillRect(a-7,b-7,14,14)});
-ctx.fillStyle="#d7b27b";ctx.beginPath();ctx.arc(270,360,44,0,Math.PI*2);ctx.fill();
-ctx.fillStyle="#fff";ctx.font="900 17px system-ui";ctx.textAlign="center";ctx.fillText("HOME",270,586);ctx.fillText("2B",270,158);ctx.fillText("3B",55,365);ctx.fillText("1B",485,365);
-if(g.half===0){ctx.font="45px system-ui";ctx.fillText(P[g.bat].e,270,630);ctx.font="700 12px system-ui";ctx.fillText("BATTER",270,650)}else{ctx.font="43px system-ui";ctx.fillText("🧤",270,630);ctx.font="700 12px system-ui";ctx.fillText("DEFENSE",270,650)}
-for(let i=0;i<3;i++)if(g.b[i]){let pos=[[458,360],[270,170],[82,360]][i];ctx.font="25px system-ui";ctx.fillText("🏃",pos[0],pos[1]-13)}
-if(g.pitch){ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(g.px,g.py,10,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#c33";ctx.lineWidth=2;ctx.stroke()}
-if(g.hit){ctx.strokeStyle="#ffe07b";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(270,550);ctx.lineTo(g.hit.x,g.hit.y);ctx.stroke();ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(g.hit.x,g.hit.y,8,0,Math.PI*2);ctx.fill()}
-}
+function fresh(){return{inning:1,half:0,outs:0,balls:0,strikes:0,away:0,home:0,bases:[0,0,0],batter:0,state:"ready",pitch:null,t0:0,dur:0,px:300,py:125,hit:null,ai:null,msg:"Choose a pitch."}}
+window.start=()=>{overlay.classList.add("hidden");newGame()};window.newGame=()=>{cancelAnimationFrame(raf);clearTimeout(timer);g=fresh();render()};
+window.showRoster=()=>{roster.classList.toggle("hidden");roster.innerHTML=P.map((p,i)=>`${i+1}. ${p.e} <b>${p.n}</b> — PWR ${p.p} • SPD ${p.s} • VIS ${p.v} • CON ${p.c} • XP ${p.xp||0}`).join("<br>")};
+window.createPlayer=()=>{let n=prompt("Player name:","My Player");if(!n)return;let p={n:n.slice(0,16),e:"⭐",p:75,s:75,v:75,c:75,xp:0};created=p;localStorage.setItem("diamondDynastyPlayer",JSON.stringify(p));P.push(p);g.batter=P.length-1;g.msg="NEW PLAYER: "+p.n;render();showRoster()};
+window.train=()=>{if(!created){createPlayer();return}if((created.xp||0)<20){alert("Need 20 XP. Current XP: "+(created.xp||0));return}created.xp-=20;created.p=Math.min(99,created.p+2);created.c=Math.min(99,created.c+2);created.s=Math.min(99,created.s+2);let i=P.findIndex(q=>q.n===created.n);if(i>=0)P[i]=created;localStorage.setItem("diamondDynastyPlayer",JSON.stringify(created));g.msg="TRAINING COMPLETE";render()};
+function startAtBat(){g.state="ready";g.pitch=null;g.msg="Choose a pitch."}
 function draw(){
-if(!g)return;
-scoreEl.textContent=g.away+" - "+g.home;inningEl.textContent=(g.half===0?"TOP ":"BOT ")+g.inn;
-outsEl.textContent=g.outs;countEl.textContent=g.balls+"-"+g.strikes;
-basesEl.textContent=g.b.map((v,i)=>v?(i===0?"1B":i===1?"2B":"3B"):"").filter(Boolean).join(" ")||"—";
-batterEl.textContent=P[g.bat].n;
-msgEl.textContent=g.msg;
-batEl.classList.toggle("hidden",g.half!==0||!(g.state==="ready"||g.state==="pitching"||g.state==="waiting"));
-pitchEl.classList.toggle("hidden",g.half!==0||g.state!=="ready");
-defEl.classList.toggle("hidden",g.half!==1||!g.play);
-drawField();
+x.clearRect(0,0,600,720);x.fillStyle="#123b20";x.fillRect(0,0,600,720);
+x.fillStyle="#1d542d";x.beginPath();x.arc(300,410,360,Math.PI,0);x.fill();
+x.fillStyle="#b88a56";x.beginPath();x.moveTo(300,590);x.lineTo(82,370);x.lineTo(300,150);x.lineTo(518,370);x.closePath();x.fill();
+x.strokeStyle="#fff";x.lineWidth=4;x.stroke();[[300,590],[82,370],[300,150],[518,370]].forEach(q=>{x.fillStyle="#fff";x.fillRect(q[0]-7,q[1]-7,14,14)});
+x.fillStyle="#d4ad75";x.beginPath();x.arc(300,370,45,0,7);x.fill();x.fillStyle="#fff";x.font="900 18px system-ui";x.textAlign="center";x.fillText("HOME",300,625);x.fillText("2B",300,138);x.fillText("3B",52,376);x.fillText("1B",548,376);
+if(g.half===0){x.font="48px system-ui";x.fillText(P[g.batter].e,300,680);x.font="700 12px system-ui";x.fillText("BATTER",300,701)}else{x.font="46px system-ui";x.fillText("🧤",300,680);x.font="700 12px system-ui";x.fillText("DEFENSE",300,701)}
+for(let i=0;i<3;i++)if(g.bases[i]){let q=[[518,370],[300,150],[82,370]][i];x.font="27px system-ui";x.fillText("🏃",q[0],q[1]-14)}
+if(g.pitch){x.fillStyle="#fff";x.beginPath();x.arc(g.px,g.py,10,0,7);x.fill();x.strokeStyle="#c44";x.stroke()}
+if(g.hit){x.strokeStyle="#ffe18a";x.lineWidth=5;x.beginPath();x.moveTo(300,590);x.lineTo(g.hit.x,g.hit.y);x.stroke();x.fillStyle="#fff";x.beginPath();x.arc(g.hit.x,g.hit.y,8,0,7);x.fill()}
 }
-function pitch(type){
-if(g.half!==0||g.state!=="ready")return;
-g.pitch=type;g.state="pitching";g.ps=performance.now();
-let dur=type==="changeup"?1250:type==="slider"?920:760;g.pe=g.ps+dur;g.msg=type.toUpperCase()+" — WATCH THE BALL";draw();animatePitch();
-}
-function animatePitch(){
-if(!g.pitch)return;let t=Math.min(1,(performance.now()-g.ps)/(g.pe-g.ps));
-let curve=g.pitch==="slider"?Math.sin(t*Math.PI)*70:g.pitch==="changeup"?Math.sin(t*Math.PI)*20:Math.sin(t*Math.PI)*9;
-g.px=270+curve;g.py=108+t*420;drawField();
-if(t<1){raf=requestAnimationFrame(animatePitch)}else{g.state="waiting";g.msg="⚡ SWING NOW!";draw();timer=setTimeout(()=>{if(g.state==="waiting")resolveSwing(false,"late")},190)}
-}
-window.swing=(kind)=>{
-if(g.state!=="pitching"&&g.state!=="waiting")return;
-let d=Math.abs(performance.now()-g.pe),p=P[g.bat];
-if(d>330){resolveSwing(true,"late");return}
-let timing=Math.max(0,1-d/330),skill=(p.c+p.v)/210,contact=Math.min(.96,.28+timing*.48+skill*.36);
-if(kind==="power")contact*=.91;
-if(Math.random()>contact){resolveSwing(true,"miss");return}
-let quality=timing*.62+p.c/250+p.v/500+Math.random()*.15;
-g.state="hit";g.pitch=null;g.hit={x:270+(Math.random()-.5)*280,y:120+Math.random()*230};
-draw();timer=setTimeout(()=>resolveHit(quality,kind),420);
-};
-window.takePitch=()=>{if(g.state!=="pitching"&&g.state!=="waiting")return;let late=performance.now()-g.pe>140;resolveSwing(false,late?"ball":"called strike")};
-function resolveSwing(miss,why){
-g.pitch=null;g.state="ready";
-if(miss){g.strikes++;g.msg=why==="late"?"Too late — STRIKE!":"Swing and miss — STRIKE!"}else{g.balls++;g.msg=why==="ball"?"BALL":"Called strike!"}
-if(!miss&&why==="called strike")g.strikes++;
-if(g.strikes>=3){g.strikes=0;g.balls=0;makeOut("STRIKEOUT!")}else if(g.balls>=4){g.strikes=0;g.balls=0;walk()}draw();
-}
-function resolveHit(q,kind){
-g.hit=null;g.state="ready";let p=P[g.bat],r=Math.random(),n=1;
-if(kind==="power"&&q>.95&&r<.26)n=4;else if(q>.9&&r<.22)n=3;else if(q>.74&&r<.34)n=2;
-advance(n);g.msg=n===4?"🔥 HOME RUN!":n===3?"TRIPLE!":n===2?"DOUBLE!":"SINGLE!";
-nextBatter();draw();
-}
-function advance(n){
-let old=[...g.b],z=[0,0,0],runs=0;
-for(let i=2;i>=0;i--)if(old[i]){let d=i+n;if(d>=3)runs++;else z[d]=1}
-if(n===1)z[0]=1; if(n===2)z[1]=1;if(n===3)z[2]=1;
-g.b=z;g.away+=runs;
-if(n===4){g.away+=1+old.filter(Boolean).length;g.b=[0,0,0]}
-}
-function walk(){let forced=g.b[0];if(forced){let r2=g.b[1],r3=g.b[2];g.b=[1,1,r2];if(r3)g.away++}else g.b[0]=1;g.msg="WALK!";nextBatter();draw()}
-function nextBatter(){g.bat=(g.bat+1)%P.length;g.balls=0;g.strikes=0}
-function makeOut(text){g.outs++;g.msg=text;if(g.outs>=3){g.outs=0;g.b=[0,0,0];switchHalf()}else{nextBatter();draw()}}
-function switchHalf(){
-if(g.half===0){g.half=1;g.state="defense";g.msg="BOTTOM ${g.inn} — DEFENSE!";draw();timer=setTimeout(aiAtBat,650)}
-else{g.inn++;g.b=[0,0,0];g.bat=0;if(g.inn>3){finish()}else{g.half=0;g.state="ready";g.msg="TOP "+g.inn+" — YOUR AT BAT";draw()}}
-}
-function aiAtBat(){
-if(!g||g.half!==1)return;let r=Math.random();
-if(r<.48){let n=r<.12?4:r<.28?2:1;g.play={n};g.msg=n===4?"AI HIT — HOME RUN THREAT!":"AI HIT — CHOOSE A THROW";draw()}
-else makeOut("AI BATTER OUT!");
-}
-window.throwBall=(base)=>{
-if(!g.play)return;
-let n=g.play.n,success=Math.random()<.73+(base===3?.04:0);g.play=null;
-if(success){g.msg="GREAT THROW — OUT!";g.outs++;if(g.outs>=3){g.outs=0;switchHalf()}else{draw();timer=setTimeout(aiAtBat,550)}}
-else{let run=(n===4||g.b[2]||base===3)?1:0;g.home+=run;g.b=n===2?[0,1,0]:[1,g.b[0],g.b[1]];g.msg="SAFE! RUNNER ADVANCES.";draw();timer=setTimeout(aiAtBat,550)}
-};
-function finish(){
-g.state="done";let result=g.away>g.home?"🏆 DYNASTY WINS!":g.away===g.home?"🤝 DRAW GAME":"RIVALS WIN";
-g.msg=result+"  Final: "+g.away+" - "+g.home;
-localStorage.setItem("diamondDynastySave",JSON.stringify(g));batEl.classList.add("hidden");pitchEl.classList.add("hidden");defEl.classList.add("hidden");draw();
-}
+function render(){if(!g)return;score.textContent=g.away+" - "+g.home;inn.textContent=(g.half?"BOT ":"TOP ")+g.inning;outs.textContent=g.outs;count.textContent=g.balls+"-"+g.strikes;base.textContent=g.bases.map((v,i)=>v?(i===0?"1B":i===1?"2B":"3B"):"").filter(Boolean).join(" ")||"—";bat.textContent=P[g.batter].n;xpEl.textContent=P[g.batter].xp||0;msg.textContent=g.msg;pitchBtns.classList.toggle("hidden",g.half!==0||g.state!=="ready");hitBtns.classList.toggle("hidden",g.half!==0||!(g.state==="pitching"||g.state==="waiting"));defBtns.classList.toggle("hidden",g.half!==1||!g.ai);draw()}
+window.choosePitch=type=>{if(g.half!==0||g.state!=="ready")return;g.pitch=type;g.state="pitching";g.t0=performance.now();g.dur=type==="changeup"?1250:type==="slider"?900:720;g.msg=type.toUpperCase()+" — WATCH";raf=requestAnimationFrame(animate)};
+function animate(){if(g.state!=="pitching")return;let t=Math.min(1,(performance.now()-g.t0)/g.dur),curve=g.pitch==="slider"?Math.sin(t*Math.PI)*75:g.pitch==="changeup"?Math.sin(t*Math.PI)*22:Math.sin(t*Math.PI)*7;g.px=300+curve;g.py=125+t*420;draw();if(t<1)raf=requestAnimationFrame(animate);else{g.state="waiting";g.msg="⚡ SWING NOW";render();timer=setTimeout(()=>{if(g.state==="waiting")resolve("late",null)},220)}}
+window.hit=kind=>{if(g.state!=="pitching"&&g.state!=="waiting")return;let delta=Math.abs(performance.now()-(g.t0+g.dur)),timing=Math.max(0,1-delta/340),p=P[g.batter],chance=Math.min(.97,.25+timing*.52+(p.c+p.v)/520-(kind==="power"?.06:0));if(Math.random()>chance){resolve(delta>340?"late":"miss",null);return}let quality=timing*.7+p.c/250+p.v/600+Math.random()*.1;g.state="hit";g.pitch=null;g.hit={x:300+(Math.random()-.5)*320,y:145+Math.random()*260};render();timer=setTimeout(()=>ballInPlay(quality,kind),380)};
+window.take=()=>{if(g.state!=="pitching"&&g.state!=="waiting")return;let late=performance.now()>g.t0+g.dur+110;resolve(late?"ball":"called strike",null)};
+function resolve(kind){g.pitch=null;g.state="ready";if(kind==="ball")g.balls++;else g.strikes++;if(kind==="ball"){g.msg="BALL"}else g.msg=kind==="late"?"LATE — STRIKE":"STRIKE";if(g.balls>=4){g.balls=0;g.strikes=0;walk()}else if(g.strikes>=3){g.balls=0;g.strikes=0;out("STRIKEOUT!")}render()}
+function ballInPlay(q,kind){g.hit=null;let r=Math.random(),n=1;if(kind==="power"&&q>.92&&r<.25)n=4;else if(q>.88&&r<.2)n=3;else if(q>.70&&r<.38)n=2;advance(n);let p=P[g.batter];p.xp=(p.xp||0)+n*2+(n===4?8:0);if(p===created){created=p;localStorage.setItem("diamondDynastyPlayer",JSON.stringify(created))}g.msg=n===4?"🔥 HOME RUN!":n===3?"TRIPLE!":n===2?"DOUBLE!":"SINGLE!";next();render()}
+function advance(n){let old=[...g.bases],z=[0,0,0],runs=0;if(n===4){runs=1+old.filter(Boolean).length;g.bases=[0,0,0]}else{for(let i=2;i>=0;i--)if(old[i]){let d=i+n;if(d>=3)runs++;else z[d]=1}z[n-1]=1;g.bases=z}g.away+=runs}
+function walk(){let old=[...g.bases];if(old[0]){if(old[1]){if(old[2])g.away++;g.bases[2]=1}g.bases[1]=1}g.bases[0]=1;g.msg="WALK!";next()}
+function next(){g.balls=0;g.strikes=0;g.batter=(g.batter+1)%P.length}
+function out(t){g.outs++;g.msg=t;if(g.outs>=3){g.outs=0;g.bases=[0,0,0];changeHalf()}else{next();render()}}
+function changeHalf(){if(g.half===0){g.half=1;g.ai=null;g.msg="BOT "+g.inning+" — DEFEND!";render();timer=setTimeout(ai,650)}else{g.inning++;g.bases=[0,0,0];g.batter=0;if(g.inning>3){finish()}else{g.half=0;startAtBat();g.msg="TOP "+g.inning+" — BAT";render()}}}
+function ai(){if(g.half!==1)return;let r=Math.random();if(r<.58){let n=r<.08?4:r<.25?3:r<.42?2:1;g.ai={n};g.msg=n===4?"DEEP FLY — DEFEND!":"BALL IN PLAY — PICK A BASE";render()}else out("AI STRIKEOUT!")}
+window.throwTo=baseChoice=>{if(!g.ai)return;let n=g.ai.n;g.ai=null;let chance=.66+(baseChoice===3?.08:0);if(Math.random()<chance){g.outs++;g.msg="OUT AT "+(["1B","2B","3B","HOME"][baseChoice]);if(g.outs>=3){g.outs=0;changeHalf()}else{render();timer=setTimeout(ai,550)}}else{let runs=n===4?1:(g.bases[2]?1:0);g.home+=runs;g.bases=n>=3?[0,0,1]:n===2?[0,1,0]:[1,g.bases[0],g.bases[1]];g.msg="SAFE!";render();timer=setTimeout(ai,550)}};
+function finish(){g.state="done";g.msg=g.away>g.home?"🏆 DYNASTY WINS!":g.away===g.home?"🤝 TIE GAME":"RIVALS WIN";localStorage.setItem("diamondDynastySave",JSON.stringify(g));render()}
 newGame();
 })();
-</script>
-</body></html>
+</script></body></html>
